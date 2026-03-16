@@ -350,6 +350,7 @@
   .perfil-overlay.open{display:flex;}
   .perfil-sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:92vh;display:flex;flex-direction:column;animation:slideUp .3s ease;overflow:hidden;}
   @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
   .perfil-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:10px auto 0;}
   .perfil-sheet-header{background:var(--banner-grad);padding:16px 20px 20px;flex-shrink:0;}
   .perfil-sheet-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:14px;color:#fff;display:flex;align-items:center;justify-content:center;z-index:1;}
@@ -482,6 +483,24 @@
   .hist-card h4{font-size:15px;font-weight:600;color:var(--text);flex:1;line-height:1.3;}
   .hist-date{font-size:11px;color:var(--text-soft);flex-shrink:0;margin-top:2px;}
   .hist-del-btn{background:none;border:1px solid var(--border);border-radius:50px;padding:5px 12px;font-size:12px;color:var(--text-soft);cursor:pointer;font-family:'Nunito',sans-serif;}
+  /* ── PATCH NOTES ── */
+  .pn-version-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm);}
+  .pn-version-card.pn-latest{border-color:var(--gold);background:var(--gold-pale);}
+  .pn-version-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .pn-version-num{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--brown);}
+  .pn-version-date{font-size:11px;color:var(--text-soft);flex:1;}
+  .pn-new-badge{font-size:10px;font-weight:700;background:var(--gold);color:#fff;border-radius:50px;padding:2px 8px;}
+  .pn-item{display:flex;gap:8px;margin-bottom:6px;font-size:13px;color:var(--text);line-height:1.5;}
+  .pn-item-icon{flex-shrink:0;font-size:14px;}
+  /* Modal novidades */
+  .novidades-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:800;align-items:flex-end;justify-content:center;}
+  .novidades-overlay.open{display:flex;}
+  .novidades-sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:24px 20px 32px;animation:slideUp .3s ease;max-height:80vh;overflow-y:auto;}
+  .novidades-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px;}
+  .novidades-hero{text-align:center;margin-bottom:20px;}
+  .novidades-hero-icon{font-size:48px;margin-bottom:8px;}
+  .novidades-hero-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--brown);margin-bottom:4px;}
+  .novidades-hero-sub{font-size:13px;color:var(--text-soft);}
 
   /* Done button */
   .done-btn{flex:1;padding:13px;border-radius:50px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;background:var(--sage-light);color:var(--sage);display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -566,9 +585,9 @@
   .pmi-icon{font-size:18px;width:22px;text-align:center;}
   .pmi-label{flex:1;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--text);}
   .perfil-menu-item.active .pmi-label{color:var(--rose);}
-  .pmi-arrow{font-size:18px;color:var(--text-soft);}
+  .pmi-arrow{font-size:18px;color:var(--text-soft);transition:transform .2s ease;}
   /* Seção de conteúdo */
-  .perfil-secao{padding:12px 16px;flex:1;overflow-y:auto;}
+  .perfil-secao{padding:0 4px 8px;}
   .perfil-info-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);margin-bottom:6px;}
   .pir-label{font-size:12px;font-weight:700;color:var(--text-soft);}
   .pir-value{font-size:13px;font-weight:600;color:var(--text);}
@@ -851,19 +870,29 @@
           <button class="premium-btn premium-btn-sm">Ver oferta →</button>
         </div>
       </div>
+      <!-- Planejador de Encontros -->
+      <div class="premium-card premium-card-secondary" data-mod="planejador" onclick="abrirPlanejador()">
+        <div class="premium-inner" style="gap:12px">
+          <div class="premium-icon-wrap premium-icon-sm">📝</div>
+          <div class="premium-content">
+            <div class="premium-badge-secondary" data-i18n="prod.novo">✨ Novo</div>
+            <div class="premium-title" style="font-size:15px" data-i18n="bonus.planejador.titulo">Planejador de Encontros</div>
+            <div class="premium-desc" style="font-size:12px" data-i18n="bonus.planejador.sub">Organize tema, dinâmica, estudo e oração</div>
+          </div>
+        </div>
+        <div class="premium-footer" style="padding-top:12px">
+          <div class="premium-price-row">
+            <span class="premium-old">De R$27</span>
+            <span class="premium-new" style="font-size:18px">R$14,90</span>
+          </div>
+          <button class="premium-btn premium-btn-sm" data-i18n="btn.ver.oferta">Ver oferta →</button>
+        </div>
+      </div>
     </div>
 
     <!-- Bônus -->
     <div class="section-title"><h3 data-i18n="home.bonus">🎁 Bônus incluídos</h3></div>
     <div class="bonus-strip">
-      <div class="bonus-card" onclick="nav('screen-planejador','nav-home')">
-        <div class="bonus-icon">📝</div>
-        <div>
-          <div class="bonus-badge" data-i18n="bonus.gratis">GRÁTIS</div>
-          <div class="bonus-title" data-i18n="bonus.planejador.titulo">Planejador de Encontros</div>
-          <div class="bonus-sub" data-i18n="bonus.planejador.sub">Organize tema, dinâmica, estudo e oração</div>
-        </div>
-      </div>
       <div class="bonus-card" onclick="nav('screen-guia','nav-home')">
         <div class="bonus-icon">🎤</div>
         <div>
@@ -1259,6 +1288,33 @@
     <div id="favoritos-list"></div>
   </div>
 
+  <!-- ══════════════ NOVIDADES ══════════════ -->
+  <div class="screen" id="screen-novidades">
+    <div class="content-header">
+      <button class="back-btn" onclick="closePerfil();nav('screen-home','nav-home')" data-i18n="btn.voltar">← Voltar</button>
+      <h2 data-i18n="novidades.titulo">🆕 Novidades do App</h2>
+      <p data-i18n="novidades.sub">Histórico completo de atualizações</p>
+    </div>
+    <div class="content-list" id="novidades-list" style="padding-bottom:80px"></div>
+  </div>
+
+  <!-- MODAL NOVIDADES (aparece ao abrir quando há versão nova) -->
+  <div class="novidades-overlay" id="novidades-overlay" onclick="fecharNovidadesOverlay(event)">
+    <div class="novidades-sheet">
+      <div class="novidades-handle"></div>
+      <div class="novidades-hero">
+        <div class="novidades-hero-icon">🌸</div>
+        <div class="novidades-hero-title" data-i18n="novidades.modal.titulo">Novidades desta versão</div>
+        <div class="novidades-hero-sub" id="novidades-modal-versao"></div>
+      </div>
+      <div id="novidades-modal-lista"></div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="share-btn secondary" style="flex:1" onclick="fecharNovidades()" data-i18n="novidades.fechar">Fechar</button>
+        <button class="share-btn primary" style="flex:1" onclick="fecharNovidades();nav('screen-novidades','nav-home')" data-i18n="novidades.ver.todas">Ver todas →</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ══════════════ BOTTOM NAV ══════════════ -->
   <nav class="bottom-nav" id="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="nav('screen-home','nav-home')">
@@ -1513,74 +1569,73 @@
       </div>
     </div><!-- /perfil-sheet-header -->
     <div class="perfil-sheet-body">
-    <!-- Menu de seções -->
+    <!-- Accordion de seções -->
     <div class="perfil-menu">
-      <button class="perfil-menu-item active" id="pmenu-info" onclick="setPerfilSecao('info')">
-        <span class="pmi-icon">👤</span><span class="pmi-label" data-i18n="perfil.info">Informações pessoais</span><span class="pmi-arrow">›</span>
-      </button>
-      <button class="perfil-menu-item" id="pmenu-modulos" onclick="setPerfilSecao('modulos')">
-        <span class="pmi-icon">📦</span><span class="pmi-label" data-i18n="modulos.tab">Módulos</span><span class="pmi-arrow">›</span>
-      </button>
-      <button class="perfil-menu-item" id="pmenu-seguranca" onclick="setPerfilSecao('seguranca')">
-        <span class="pmi-icon">🔒</span><span class="pmi-label">Segurança</span><span class="pmi-arrow">›</span>
-      </button>
-    </div>
 
-    <!-- Seção: Informações pessoais -->
-    <div class="perfil-secao" id="psecao-info">
-      <div class="umc-section-label" data-i18n="perfil.info">Informações pessoais</div>
-      <div class="umc-form">
-        <div class="umc-form-field">
-          <label data-i18n="perfil.nome">Nome completo</label>
-          <input class="umc-input" id="perfil-nome" type="text" data-i18n-ph="perfil.nome.ph" placeholder="Seu nome completo">
-        </div>
-        <div class="umc-form-field">
-          <label data-i18n="perfil.telefone">Telefone / WhatsApp</label>
-          <input class="umc-input" id="perfil-telefone" type="tel" data-i18n-ph="perfil.telefone.ph" placeholder="(48) 99999-9999">
-        </div>
-        <div class="umc-form-field">
-          <label data-i18n="perfil.igreja">Igreja / Ministério</label>
-          <input class="umc-input" id="perfil-igreja" type="text" data-i18n-ph="perfil.igreja.ph" placeholder="Nome da sua igreja">
-        </div>
-        <div class="umc-form-field">
-          <label data-i18n="perfil.cidade">Cidade</label>
-          <input class="umc-input" id="perfil-cidade" type="text" data-i18n-ph="perfil.cidade.ph" placeholder="Sua cidade">
-        </div>
-        <div class="umc-form-field">
-          <label data-i18n="perfil.cargo">Cargo / Função</label>
-          <input class="umc-input" id="perfil-cargo" type="text" data-i18n-ph="perfil.cargo.ph" placeholder="Ex: Líder de mulheres, Pastora...">
-        </div>
-        <div class="umc-form-field">
-          <label data-i18n="perfil.bio">Sobre mim</label>
-          <textarea class="umc-input umc-textarea" id="perfil-bio" rows="3" data-i18n-ph="perfil.bio.ph" placeholder="Conte um pouco sobre seu ministério..."></textarea>
-        </div>
-        <button class="umc-save-btn" onclick="salvarPerfil()" data-i18n="perfil.salvar">💾 Salvar informações</button>
-      </div>
-    </div>
-
-    <!-- Seção: Módulos -->
-    <div class="perfil-secao" id="psecao-modulos" style="display:none">
-      <div class="umc-section-label" data-i18n="modulos.label">Seus módulos</div>
-      <div id="perfil-modulos-lista" class="umc-modulos"></div>
-    </div>
-
-    <!-- Seção: Segurança -->
-    <div class="perfil-secao" id="psecao-seguranca" style="display:none">
-      <div class="umc-section-label">Conta</div>
-      <div class="umc-form">
-        <div class="perfil-info-row">
-          <span class="pir-label" data-i18n="perfil.email.label">E-mail</span>
-          <span class="pir-value" id="perfil-sec-email"></span>
-        </div>
-        <div class="perfil-info-row">
-          <span class="pir-label" data-i18n="perfil.plano.label">Plano</span>
-          <span class="pir-value" id="perfil-sec-plano"></span>
+      <!-- Informações pessoais -->
+      <button class="perfil-menu-item" id="pmenu-info" onclick="togglePerfilSecao('info')">
+        <span class="pmi-icon">👤</span><span class="pmi-label" data-i18n="perfil.info">Informações pessoais</span><span class="pmi-arrow" id="parrow-info">›</span>
+      </button>
+      <div class="perfil-secao" id="psecao-info" style="display:none">
+        <div class="umc-form">
+          <div class="umc-form-field">
+            <label data-i18n="perfil.nome">Nome completo</label>
+            <input class="umc-input" id="perfil-nome" type="text" data-i18n-ph="perfil.nome.ph" placeholder="Seu nome completo">
+          </div>
+          <div class="umc-form-field">
+            <label data-i18n="perfil.telefone">Telefone / WhatsApp</label>
+            <input class="umc-input" id="perfil-telefone" type="tel" data-i18n-ph="perfil.telefone.ph" placeholder="(48) 99999-9999">
+          </div>
+          <div class="umc-form-field">
+            <label data-i18n="perfil.igreja">Igreja / Ministério</label>
+            <input class="umc-input" id="perfil-igreja" type="text" data-i18n-ph="perfil.igreja.ph" placeholder="Nome da sua igreja">
+          </div>
+          <div class="umc-form-field">
+            <label data-i18n="perfil.cidade">Cidade</label>
+            <input class="umc-input" id="perfil-cidade" type="text" data-i18n-ph="perfil.cidade.ph" placeholder="Sua cidade">
+          </div>
+          <div class="umc-form-field">
+            <label data-i18n="perfil.cargo">Cargo / Função</label>
+            <input class="umc-input" id="perfil-cargo" type="text" data-i18n-ph="perfil.cargo.ph" placeholder="Ex: Líder de mulheres, Pastora...">
+          </div>
+          <div class="umc-form-field">
+            <label data-i18n="perfil.bio">Sobre mim</label>
+            <textarea class="umc-input umc-textarea" id="perfil-bio" rows="3" data-i18n-ph="perfil.bio.ph" placeholder="Conte um pouco sobre seu ministério..."></textarea>
+          </div>
+          <button class="umc-save-btn" onclick="salvarPerfilEFechar()" data-i18n="perfil.salvar">💾 Salvar informações</button>
         </div>
       </div>
-      <div style="height:16px"></div>
-      <button onclick="fazerLogout()" class="umc-logout-btn" data-i18n="logout">↩ Sair da conta</button>
-    </div>
 
+      <!-- Módulos -->
+      <button class="perfil-menu-item" id="pmenu-modulos" onclick="togglePerfilSecao('modulos')">
+        <span class="pmi-icon">📦</span><span class="pmi-label" data-i18n="modulos.tab">Módulos</span><span class="pmi-arrow" id="parrow-modulos">›</span>
+      </button>
+      <div class="perfil-secao" id="psecao-modulos" style="display:none">
+        <div class="umc-section-label" data-i18n="modulos.label">Seus módulos</div>
+        <div id="perfil-modulos-lista" class="umc-modulos"></div>
+      </div>
+
+      <!-- Segurança -->
+      <button class="perfil-menu-item" id="pmenu-seguranca" onclick="togglePerfilSecao('seguranca')">
+        <span class="pmi-icon">🔒</span><span class="pmi-label" data-i18n="perfil.seguranca">Segurança</span><span class="pmi-arrow" id="parrow-seguranca">›</span>
+      </button>
+      <div class="perfil-secao" id="psecao-seguranca" style="display:none">
+        <div class="umc-form">
+          <div class="perfil-info-row">
+            <span class="pir-label" data-i18n="perfil.email.label">E-mail</span>
+            <span class="pir-value" id="perfil-sec-email"></span>
+          </div>
+          <div class="perfil-info-row">
+            <span class="pir-label" data-i18n="perfil.plano.label">Plano</span>
+            <span class="pir-value" id="perfil-sec-plano"></span>
+          </div>
+        </div>
+        <div style="height:16px"></div>
+        <button onclick="closePerfil();nav('screen-novidades','nav-home')" class="umc-logout-btn" style="color:var(--gold);border-color:var(--gold);margin-bottom:8px" data-i18n="novidades.btn">🆕 Ver novidades do app</button>
+        <button onclick="fazerLogout()" class="umc-logout-btn" data-i18n="logout">↩ Sair da conta</button>
+      </div>
+
+    </div>
     </div><!-- /perfil-sheet-body -->
     </div><!-- /perfil-sheet -->
   </div><!-- /perfil-overlay -->
@@ -3068,7 +3123,7 @@ const USUARIOS = {
       estudos: false,
       encontros: false,
       devocional: false,
-      planejador: true,
+      planejador: false,
       guia: true,
       floresça: true,
     }
@@ -3159,6 +3214,9 @@ function entrarNoApp(){
     if(isAdmin) renderAdminPanel();
     // Mostrar dica do dia
     setTimeout(mostrarTipDoDia, 800);
+    // Checar novidades
+    renderNovidadesList();
+    checkNovidadesModal();
     toastMsg('✦ ' + t('home.welcome.back').replace('🌿','').trim().split(',')[0] + ', ' + usuarioAtual.nome.split(' ')[0] + '!');
     setTimeout(aplicarIdioma, 50);
   }, 380);
@@ -3265,15 +3323,15 @@ function atualizarBloqueios(){
       } else {
         el.innerHTML = `
           <div class="premium-inner" style="gap:12px">
-            <div class="premium-icon-wrap premium-icon-sm">📖</div>
+            <div class="premium-icon-wrap premium-icon-sm">${icon}</div>
             <div class="premium-content">
-              <div class="premium-badge-secondary">${t('prod.oferta.especial')}</div>
-              <div class="premium-title" style="font-size:15px">${t('prod.devocional.titulo')}</div>
-              <div class="premium-desc" style="font-size:12px">${t('prod.devocional.desc')}</div>
+              <div class="premium-badge-secondary">${selector.includes('planejador') ? t('prod.novo') : t('prod.oferta.especial')}</div>
+              <div class="premium-title" style="font-size:15px">${title}</div>
+              <div class="premium-desc" style="font-size:12px">${desc}</div>
             </div>
           </div>
           <div class="premium-footer" style="padding-top:12px">
-            <div class="premium-price-row"><span class="premium-old">De R$27</span><span class="premium-new" style="font-size:18px">R$17</span></div>
+            <div class="premium-price-row"><span class="premium-old">${selector.includes('planejador') ? 'De R$27' : 'De R$27'}</span><span class="premium-new" style="font-size:18px">${selector.includes('planejador') ? 'R$14,90' : 'R$17'}</span></div>
             <button class="premium-btn premium-btn-sm">${t('btn.ver.oferta')}</button>
           </div>`;
       }
@@ -3292,6 +3350,10 @@ function atualizarBloqueios(){
   setPremiumCard('[data-mod="devocional"]', m.devocional, ()=>abrirDevocional(), '📖',
     t('prod.devocional.titulo'), t('prod.devocional.desc'),
     t('prod.devocional.titulo'), t('prod.devocional.desc'));
+
+  setPremiumCard('[data-mod="planejador"]', m.planejador, ()=>abrirPlanejador(), '📝',
+    t('bonus.planejador.titulo'), t('bonus.planejador.sub'),
+    t('bonus.planejador.titulo'), t('bonus.planejador.sub'));
 
   renderPlanejadorCampos();
 }
@@ -3379,15 +3441,54 @@ function salvarPerfil(){
   toastMsg(t('perfil.salvo'));
 }
 
-function setPerfilSecao(sec){
-  ['info','modulos','seguranca'].forEach(s=>{
-    document.getElementById('pmenu-'+s)?.classList.toggle('active', s===sec);
-    const el = document.getElementById('psecao-'+s);
-    if(el) el.style.display = s===sec ? '' : 'none';
-  });
-  if(sec==='modulos') renderPerfilModulos();
-  if(sec==='seguranca') renderPerfilSeguranca();
+function salvarPerfilEFechar(){
+  salvarPerfil();
+  // Fecha o accordion da seção info
+  togglePerfilSecao('info'); // toggles it closed since it's open
 }
+
+// ESC fecha o perfil overlay
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    const novidades = document.getElementById('novidades-overlay');
+    if(novidades?.classList.contains('open')){ fecharNovidades(); return; }
+    const perfil = document.getElementById('perfil-overlay');
+    if(perfil?.classList.contains('open')){ closePerfil(); return; }
+    const aval = document.getElementById('aval-overlay');
+    if(aval?.classList.contains('open')){ fecharAval(); return; }
+    const stories = document.getElementById('stories-overlay');
+    if(stories?.classList.contains('open')){ fecharStories(); return; }
+    const desfav = document.getElementById('modal-desfav-overlay');
+    if(desfav?.classList.contains('open')){ desfav.classList.remove('open'); return; }
+  }
+});
+
+function togglePerfilSecao(sec){
+  const isOpen = document.getElementById('psecao-'+sec)?.style.display !== 'none';
+  // Fecha todas
+  ['info','modulos','seguranca'].forEach(s=>{
+    const el = document.getElementById('psecao-'+s);
+    const btn = document.getElementById('pmenu-'+s);
+    const arrow = document.getElementById('parrow-'+s);
+    if(el) el.style.display = 'none';
+    if(btn) btn.classList.remove('active');
+    if(arrow) arrow.style.transform = '';
+  });
+  // Se estava fechada, abre
+  if(!isOpen){
+    const el = document.getElementById('psecao-'+sec);
+    const btn = document.getElementById('pmenu-'+sec);
+    const arrow = document.getElementById('parrow-'+sec);
+    if(el){ el.style.display = ''; el.style.animation = 'slideDown .2s ease'; }
+    if(btn) btn.classList.add('active');
+    if(arrow) arrow.style.transform = 'rotate(90deg)';
+    if(sec==='modulos') renderPerfilModulos();
+    if(sec==='seguranca') renderPerfilSeguranca();
+  }
+}
+
+// Mantém compatibilidade com chamadas existentes de setPerfilSecao
+function setPerfilSecao(sec){ togglePerfilSecao(sec); }
 
 function renderPerfilModulos(){
   const el = document.getElementById('perfil-modulos-lista');
@@ -3954,6 +4055,7 @@ function renderAdminPanel(){
     {key:'estudos'},
     {key:'encontros'},
     {key:'devocional'},
+    {key:'planejador'},
   ];
 
   const list = document.getElementById('admin-users-list');
@@ -4232,6 +4334,19 @@ const TRANSLATIONS = {
     'prod.mais.vendido': '⭐ Mais vendido',
     'prod.oferta.especial': '💛 Oferta especial',
     'btn.voltar': '← Voltar',
+    'novidades.titulo': '🆕 Novidades do App',
+    'novidades.sub': 'Histórico completo de atualizações',
+    'novidades.modal.titulo': 'Novidades desta versão',
+    'novidades.fechar': 'Fechar',
+    'novidades.ver.todas': 'Ver todas →',
+    'novidades.btn': '🆕 Ver novidades do app',
+    'prod.novo': '✨ Novo',
+    'prod.planejador.preco.old': 'De R$27',
+    'prod.planejador.preco.new': 'R$14,90',
+    'perfil.seguranca': 'Segurança',
+    'qg.como.aplicar': '📋 Como Aplicar',
+    'qg.duracao': '⏱ Duração',
+    'qg.dica': '💡 Dica da Líder',
     'aval.titulo': '🌸 Como foi o encontro?',
     'aval.nota': 'Avaliação geral',
     'aval.participantes': 'Quantas participaram?',
@@ -4497,6 +4612,19 @@ const TRANSLATIONS = {
     'prod.mais.vendido': '⭐ Best seller',
     'prod.oferta.especial': '💛 Special offer',
     'home.section.premium': '✨ Premium Products',
+    'novidades.titulo': '🆕 App Updates',
+    'novidades.sub': 'Full update history',
+    'novidades.modal.titulo': "What's new in this version",
+    'novidades.fechar': 'Close',
+    'novidades.ver.todas': 'See all →',
+    'novidades.btn': '🆕 See app updates',
+    'prod.novo': '✨ New',
+    'prod.planejador.preco.old': 'From R$27',
+    'prod.planejador.preco.new': 'R$14.90',
+    'perfil.seguranca': 'Security',
+    'qg.como.aplicar': '📋 How to Apply',
+    'qg.duracao': '⏱ Duration',
+    'qg.dica': '💡 Leader Tip',
     'aval.titulo': '🌸 How was the meeting?',
     'aval.nota': 'Overall rating',
     'aval.participantes': 'How many participated?',
@@ -4768,6 +4896,19 @@ const TRANSLATIONS = {
     'plan.sug.ver.todas': 'Ver todas →',
     'admin.stat.usuarios': 'Usuarias',
     'admin.stat.ativos': 'Activas',
+    'novidades.titulo': '🆕 Novedades',
+    'novidades.sub': 'Historial completo de actualizaciones',
+    'novidades.modal.titulo': 'Novedades de esta versión',
+    'novidades.fechar': 'Cerrar',
+    'novidades.ver.todas': 'Ver todas →',
+    'novidades.btn': '🆕 Ver novedades',
+    'prod.novo': '✨ Nuevo',
+    'prod.planejador.preco.old': 'De R$27',
+    'prod.planejador.preco.new': 'R$14,90',
+    'perfil.seguranca': 'Seguridad',
+    'qg.como.aplicar': '📋 Cómo Aplicar',
+    'qg.duracao': '⏱ Duración',
+    'qg.dica': '💡 Consejo de la Líder',
     'aval.titulo': '🌸 ¿Cómo fue el encuentro?',
     'aval.nota': 'Evaluación general',
     'aval.participantes': '¿Cuántas participaron?',
@@ -5144,6 +5285,10 @@ const devocional7 = [
   {id:7,titulo:'Dia 7: Vivendo com Propósito',emoji:'🧭',versiculo:'Jeremias 29:11',versiculoTexto:'Porque eu sei que os planos que tenho para vocês — diz o Senhor — planos de paz e não de mal, para lhes dar um futuro e uma esperança.',reflexao:'Você já se perguntou qual é o propósito de sua vida? Já se sentiu perdida, sem direção clara? A boa notícia é que Deus já escreveu um propósito único para você, profundamente conectado com Seu amor e Seus planos perfeitos.\n\nViver com propósito não significa ter todas as respostas. Significa confiar que o Criador, que te formou com cuidado e amor, tem um plano perfeito para você. Significa caminhar em fé, mesmo quando o caminho não está completamente iluminado. Quando abraçamos o propósito de Deus para nossas vidas, descobrimos uma satisfação que o mundo não pode oferecer.',pergunta:'Como você gostaria de viver diferentemente se confiasse completamente que Deus tem um propósito perfeito para sua vida?',aplicacao:'Escreva uma carta para Deus descrevendo seus sonhos, perguntas e inseguranças sobre propósito. Depois, reescreva-a como se fosse uma resposta Dele, baseada em Seu amor e fidelidade.',oracao:'Pai Celestial, hoje agradeço por ter um propósito único em Teus planos. Ajuda-me a confiar em Teus caminhos, mesmo quando não compreendo completamente. Capacita-me a viver cada dia com intenção, refletindo Teu amor e conhecendo profundamente Teu propósito para mim. Em nome de Jesus, amém.'},
 ];
 
+function abrirPlanejador(){
+  if(!usuarioAtual?.modulos?.planejador){ openLocked(t('bonus.planejador.titulo'), t('bonus.planejador.sub')); return; }
+  nav('screen-planejador','nav-home');
+}
 function abrirDevocional(){
   if(!usuarioAtual?.modulos?.devocional){ openUpsell(2); return; }
   renderDevocional();
@@ -5304,19 +5449,19 @@ function openQGDetail(id){
   document.getElementById('qg-detail-titulo').textContent = q.titulo;
   document.getElementById('qg-detail-body').innerHTML = `
     <div class="detail-section">
-      <h5>🎯 ${t('din.objetivo')}</h5>
+      <h5>${t('din.objetivo')}</h5>
       <p>${q.objetivo}</p>
     </div>
     <div class="detail-section">
-      <h5>📋 Como Aplicar</h5>
+      <h5>${t('qg.como.aplicar')}</h5>
       <p>${q.como}</p>
     </div>
     <div class="detail-section">
-      <h5>⏱ Duração</h5>
+      <h5>${t('qg.duracao')}</h5>
       <p>${q.duracao}</p>
     </div>
     <div class="detail-section" style="border-left:3px solid var(--gold)">
-      <h5>💡 Dica da Líder</h5>
+      <h5>${t('qg.dica')}</h5>
       <p>${q.dica}</p>
     </div>`;
   nav('screen-qg-detail','nav-home');
@@ -5480,6 +5625,112 @@ function toggleFavPergunta(id){
       if(btn) btn.textContent='❤️';
     }
   }catch(e){}
+}
+
+// ── PATCH NOTES ──
+const APP_VERSION = '1.3.0';
+const STORAGE_KEY_VERSION = 'encontros_versao_v1';
+
+const PATCH_NOTES = [
+  {
+    versao: '1.3.0',
+    data: '2026-03-16',
+    novidade: true,
+    itens: [
+      {icon:'⏱', texto:'Timer integrado nas dinâmicas — cronômetro automático baseado no tempo sugerido'},
+      {icon:'🌸', texto:'Avaliação pós-encontro — registre estrelas, participantes e observações'},
+      {icon:'📸', texto:'Gerador de imagem para Stories do Instagram — compartilhe dinâmicas com estilo'},
+      {icon:'📋', texto:'Histórico mostra avaliações salvas com estrelas e número de participantes'},
+      {icon:'🧊', texto:'50 Quebra-Gelos Cristãos — novo módulo disponível'},
+      {icon:'📝', texto:'Planejador de Encontros agora é um produto premium com R$14,90'},
+    ]
+  },
+  {
+    versao: '1.2.0',
+    data: '2026-03-10',
+    novidade: false,
+    itens: [
+      {icon:'🌸', texto:'Perfil em formato bottom-sheet — abre como painel sem trocar de tela'},
+      {icon:'🎲', texto:'Gerador de dinâmicas sem repetição — percorre todas as 200 antes de repetir'},
+      {icon:'🗂', texto:'Histórico de dinâmicas geradas na sessão atual'},
+      {icon:'🔒', texto:'Confirmação ao desfavoritar — evita remoção acidental'},
+      {icon:'📅', texto:'Datepicker customizado no Planejador — campo de texto com formatação automática'},
+      {icon:'🌐', texto:'Correções de tradução PT/EN/ES em toda a aplicação'},
+    ]
+  },
+  {
+    versao: '1.1.0',
+    data: '2026-03-05',
+    novidade: false,
+    itens: [
+      {icon:'🌙', texto:'Tema claro e escuro disponíveis'},
+      {icon:'🌐', texto:'Suporte a 3 idiomas: Português, English e Español'},
+      {icon:'💬', texto:'100 Perguntas Poderosas com filtro por categoria'},
+      {icon:'📖', texto:'30 Estudos Bíblicos completos'},
+      {icon:'📿', texto:'Devocional de 7 Dias com versículo, reflexão e oração'},
+      {icon:'🤍', texto:'Sistema de favoritos com persistência por conta'},
+    ]
+  },
+  {
+    versao: '1.0.0',
+    data: '2026-02-28',
+    novidade: false,
+    itens: [
+      {icon:'🎉', texto:'Lançamento do app Encontros de Mulheres'},
+      {icon:'🎭', texto:'200 Dinâmicas completas com objetivo, materiais, passos e aplicação'},
+      {icon:'🌸', texto:'50 Encontros Completos prontos para conduzir'},
+      {icon:'📝', texto:'Planejador de Encontros com versículo via API'},
+      {icon:'✨', texto:'Gerador de encontros aleatório'},
+      {icon:'⚙️', texto:'Painel admin para gerenciar módulos por usuária'},
+    ]
+  },
+];
+
+function renderNovidadesList(){
+  const c = document.getElementById('novidades-list');
+  if(!c) return;
+  c.innerHTML = PATCH_NOTES.map((pn, i) => `
+    <div class="pn-version-card ${i===0?'pn-latest':''}">
+      <div class="pn-version-header">
+        <span class="pn-version-num">v${pn.versao}</span>
+        <span class="pn-version-date">${new Date(pn.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</span>
+        ${i===0 ? `<span class="pn-new-badge">ATUAL</span>` : ''}
+      </div>
+      ${pn.itens.map(it=>`
+        <div class="pn-item">
+          <span class="pn-item-icon">${it.icon}</span>
+          <span>${it.texto}</span>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function checkNovidadesModal(){
+  try{
+    const vistaNaVersao = localStorage.getItem(STORAGE_KEY_VERSION);
+    if(vistaNaVersao === APP_VERSION) return;
+    // Há versão nova — mostrar modal após 1s
+    setTimeout(abrirNovidadesModal, 1200);
+  }catch(e){}
+}
+
+function abrirNovidadesModal(){
+  const latest = PATCH_NOTES[0];
+  document.getElementById('novidades-modal-versao').textContent = `v${latest.versao} · ${new Date(latest.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long'})}`;
+  document.getElementById('novidades-modal-lista').innerHTML = latest.itens.map(it=>`
+    <div class="pn-item">
+      <span class="pn-item-icon">${it.icon}</span>
+      <span style="font-size:13px;color:var(--text);line-height:1.5">${it.texto}</span>
+    </div>`).join('');
+  document.getElementById('novidades-overlay').classList.add('open');
+}
+
+function fecharNovidades(){
+  document.getElementById('novidades-overlay').classList.remove('open');
+  try{ localStorage.setItem(STORAGE_KEY_VERSION, APP_VERSION); }catch(e){}
+}
+
+function fecharNovidadesOverlay(e){
+  if(e.target===document.getElementById('novidades-overlay')) fecharNovidades();
 }
 
 // ── INIT ──
