@@ -486,6 +486,40 @@
   /* Done button */
   .done-btn{flex:1;padding:13px;border-radius:50px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;background:var(--sage-light);color:var(--sage);display:flex;align-items:center;justify-content:center;gap:6px;}
   .done-btn.feita{background:var(--sage);color:#fff;}
+  /* ── TIMER ── */
+  .timer-bar{background:var(--surface);border-top:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;bottom:60px;z-index:10;}
+  .timer-display{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--brown);min-width:80px;letter-spacing:1px;}
+  .timer-display.urgente{color:var(--rose);animation:pulse .8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .timer-btn{width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;}
+  .timer-btn.play{background:var(--gold);color:#fff;}
+  .timer-btn.pause{background:var(--sage);color:#fff;}
+  .timer-btn.reset{background:var(--bg);border:1.5px solid var(--border);color:var(--text-soft);}
+  .timer-label{font-size:11px;color:var(--text-soft);flex:1;}
+  .timer-progress{height:3px;background:var(--border);border-radius:2px;margin-top:4px;}
+  .timer-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .5s linear;}
+  /* ── AVALIAÇÃO ── */
+  .aval-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:600;align-items:flex-end;justify-content:center;}
+  .aval-overlay.open{display:flex;}
+  .aval-sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:24px 20px 32px;animation:slideUp .3s ease;}
+  .aval-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px;}
+  .aval-stars{display:flex;gap:8px;justify-content:center;margin:12px 0;}
+  .aval-star{font-size:32px;cursor:pointer;transition:transform .1s;line-height:1;}
+  .aval-star:hover{transform:scale(1.2);}
+  .aval-textarea{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:13px;background:var(--bg);color:var(--text);resize:none;outline:none;box-sizing:border-box;}
+  .aval-textarea:focus{border-color:var(--gold);}
+  .aval-num-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px;}
+  .aval-num-btn{padding:6px 14px;border-radius:50px;border:1.5px solid var(--border);background:var(--bg);font-family:'Nunito',sans-serif;font-size:13px;cursor:pointer;color:var(--text);}
+  .aval-num-btn.selected{background:var(--gold);color:#fff;border-color:var(--gold);}
+  /* ── STORIES ── */
+  .stories-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:700;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+  .stories-overlay.open{display:flex;}
+  .stories-canvas-wrap{position:relative;width:270px;height:480px;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .stories-canvas{width:100%;height:100%;}
+  .stories-actions{display:flex;gap:12px;}
+  .stories-btn{padding:12px 24px;border-radius:50px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;}
+  .stories-btn.primary{background:var(--gold);color:#fff;}
+  .stories-btn.secondary{background:rgba(255,255,255,.15);color:#fff;}
 
   /* Admin panel */
   .admin-header{padding:52px 20px 20px;background:var(--upsell-grad);}
@@ -893,9 +927,24 @@
       <div class="content-card-meta" id="detail-tags" style="margin-top:6px"></div>
     </div>
     <div class="detail-body" id="detail-body"></div>
+    <!-- Timer Bar -->
+    <div class="timer-bar" id="timer-bar" style="display:none">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="timer-display" id="timer-display">00:00</span>
+          <div style="flex:1">
+            <div class="timer-label" id="timer-label">⏱ Timer</div>
+            <div class="timer-progress"><div class="timer-progress-fill" id="timer-fill" style="width:100%"></div></div>
+          </div>
+        </div>
+      </div>
+      <button class="timer-btn play" id="timer-play-btn" onclick="timerToggle()">▶</button>
+      <button class="timer-btn reset" onclick="timerReset()">↺</button>
+    </div>
     <div class="share-row">
       <button class="done-btn" id="detail-done-btn" onclick="toggleDone()" data-i18n="din.marcar">✓ Marcar como realizada</button>
-      <button class="share-btn primary" onclick="compartilharDinamica()" style="flex:0 0 auto;padding:13px 18px" data-i18n="btn.compartilhar">📲 Compartilhar</button>
+      <button class="timer-btn play" style="flex:0 0 auto;width:44px;height:44px;border-radius:50%" onclick="timerOpen()" title="Timer">⏱</button>
+      <button class="share-btn primary" onclick="abrirStories()" style="flex:0 0 auto;padding:13px 14px" title="Stories">📸</button>
       <button class="share-btn secondary" id="detail-fav-btn" onclick="toggleFavDetail()" data-i18n="btn.salvar">🤍 Salvar</button>
     </div>
   </div>
@@ -1546,6 +1595,50 @@
         <button id="modal-desfav-cancel" class="share-btn secondary" style="flex:1" data-i18n="btn.cancelar">Cancelar</button>
         <button id="modal-desfav-confirm" class="share-btn primary" style="flex:1;background:var(--rose)" data-i18n="fav.remover.confirmar">Sim, remover</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL AVALIAÇÃO PÓS-ENCONTRO -->
+  <div class="aval-overlay" id="aval-overlay" onclick="fecharAvalOverlay(event)">
+    <div class="aval-sheet">
+      <div class="aval-handle"></div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:var(--brown);margin-bottom:4px" data-i18n="aval.titulo">🌸 Como foi o encontro?</h3>
+      <p style="font-size:13px;color:var(--text-soft);margin-bottom:16px" id="aval-din-nome"></p>
+      <!-- Estrelas -->
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px" data-i18n="aval.nota">Avaliação geral</div>
+      <div class="aval-stars" id="aval-stars">
+        <span class="aval-star" onclick="avalSetStar(1)" id="aval-s1">☆</span>
+        <span class="aval-star" onclick="avalSetStar(2)" id="aval-s2">☆</span>
+        <span class="aval-star" onclick="avalSetStar(3)" id="aval-s3">☆</span>
+        <span class="aval-star" onclick="avalSetStar(4)" id="aval-s4">☆</span>
+        <span class="aval-star" onclick="avalSetStar(5)" id="aval-s5">☆</span>
+      </div>
+      <!-- Participantes -->
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px" data-i18n="aval.participantes">Quantas participaram?</div>
+      <div class="aval-num-row" id="aval-num-row">
+        <button class="aval-num-btn" onclick="avalSetNum(this,'1-5')">1-5</button>
+        <button class="aval-num-btn" onclick="avalSetNum(this,'6-10')">6-10</button>
+        <button class="aval-num-btn" onclick="avalSetNum(this,'11-20')">11-20</button>
+        <button class="aval-num-btn" onclick="avalSetNum(this,'20+')">20+</button>
+      </div>
+      <!-- Observação -->
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px" data-i18n="aval.obs">Observações (opcional)</div>
+      <textarea class="aval-textarea" id="aval-obs" rows="3" data-i18n-ph="aval.obs.ph" placeholder="O que funcionou bem? O que você faria diferente?"></textarea>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="share-btn secondary" style="flex:1" onclick="fecharAval()" data-i18n="btn.cancelar">Cancelar</button>
+        <button class="share-btn primary" style="flex:1" onclick="salvarAval()" data-i18n="aval.salvar">✅ Salvar avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL STORIES -->
+  <div class="stories-overlay" id="stories-overlay" onclick="fecharStoriesOverlay(event)">
+    <div class="stories-canvas-wrap">
+      <canvas class="stories-canvas" id="stories-canvas" width="1080" height="1920"></canvas>
+    </div>
+    <div class="stories-actions">
+      <button class="stories-btn secondary" onclick="fecharStories()">✕ Fechar</button>
+      <button class="stories-btn primary" onclick="salvarStories()">⬇️ Salvar imagem</button>
     </div>
   </div>
 
@@ -3479,25 +3572,6 @@ let historico = [];
 function salvarHistorico(){ try{ localStorage.setItem(STORAGE_KEY_HIST(), JSON.stringify(historico)); }catch(e){} }
 function carregarHistorico(){ try{ const h=localStorage.getItem(STORAGE_KEY_HIST()); historico=h?JSON.parse(h):[]; }catch(e){ historico=[]; } }
 
-function toggleDone(){
-  if(!currentDetail) return;
-  const id = currentDetail.id;
-  const jaFeita = historico.find(h=>h.id===id);
-  if(jaFeita){
-    historico = historico.filter(h=>h.id!==id);
-    toastMsg('↩️ Removida do histórico');
-  } else {
-    historico.unshift({
-      id, titulo: currentDetail.titulo, categoria: currentDetail.categoria,
-      tempo: currentDetail.tempo, data: new Date().toISOString()
-    });
-    toastMsg('✅ Marcada como realizada!');
-  }
-  salvarHistorico();
-  updateDoneBtn();
-  renderHistorico();
-}
-
 function updateDoneBtn(){
   const btn = document.getElementById('detail-done-btn');
   if(!btn || !currentDetail) return;
@@ -3516,19 +3590,31 @@ function renderHistorico(){
     </div>`;
     return;
   }
-  c.innerHTML = historico.map(h=>`
+  c.innerHTML = historico.map(h=>{
+    const aval = h.avaliacao;
+    const estrelas = aval ? '⭐'.repeat(aval.estrelas) + '☆'.repeat(5-aval.estrelas) : '';
+    const avalHtml = aval ? `
+      <div style="margin-top:8px;padding:8px 10px;background:var(--bg);border-radius:10px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="font-size:14px">${estrelas}</span>
+          ${aval.participantes ? `<span class="tag" style="font-size:10px">👥 ${aval.participantes} participantes</span>` : ''}
+        </div>
+        ${aval.obs ? `<p style="color:var(--text-soft);margin:0;line-height:1.4">${aval.obs}</p>` : ''}
+      </div>` : `<button onclick="abrirAval({id:${h.id},titulo:'${h.titulo.replace(/'/g,"\\'")}',categoria:'${h.categoria}',tempo:'${h.tempo}',objetivo:'',aplicacao:''})" style="margin-top:8px;font-size:11px;color:var(--rose);background:none;border:1px dashed var(--rose);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Nunito',sans-serif">+ Adicionar avaliação</button>`;
+    return `
     <div class="hist-card">
       <div class="hist-card-top">
         <h4>${h.titulo}</h4>
         <span class="hist-date">${new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})}</span>
       </div>
-      <div class="content-card-meta" style="margin-bottom:10px">
+      <div class="content-card-meta" style="margin-bottom:6px">
         <span class="tag">${h.categoria}</span>
         <span class="tag sage">⏱ ${h.tempo}</span>
         <span class="tag" style="background:var(--sage-light);color:var(--sage)">✓ Realizada</span>
       </div>
-      <button class="hist-del-btn" onclick="removerHistorico(${h.id})">🗑️ Remover</button>
-    </div>`).join('');
+      ${avalHtml}
+      <button class="hist-del-btn" onclick="removerHistorico(${h.id})" style="margin-top:10px">🗑️ Remover</button>
+    </div>`}).join('');
 }
 
 function removerHistorico(id){
@@ -3536,6 +3622,299 @@ function removerHistorico(id){
   salvarHistorico();
   renderHistorico();
   toastMsg('Removido do histórico');
+}
+
+// ── TIMER ──
+let timerInterval = null;
+let timerTotal = 0;
+let timerLeft = 0;
+let timerRunning = false;
+
+function timerOpen(){
+  if(!currentDetail) return;
+  // Parse tempo from "15 min" or "10-15 min" → use max value
+  const tempoStr = currentDetail.tempo || '10 min';
+  const nums = tempoStr.match(/\d+/g);
+  const mins = nums ? Math.max(...nums.map(Number)) : 10;
+  timerTotal = mins * 60;
+  timerLeft = timerTotal;
+  timerRunning = false;
+  const bar = document.getElementById('timer-bar');
+  bar.style.display = 'flex';
+  document.getElementById('timer-label').textContent = `⏱ ${mins} min — ${currentDetail.titulo}`;
+  document.getElementById('timer-play-btn').textContent = '▶';
+  document.getElementById('timer-play-btn').className = 'timer-btn play';
+  timerUpdateDisplay();
+  bar.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function timerToggle(){
+  if(timerRunning){
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('timer-play-btn').textContent = '▶';
+    document.getElementById('timer-play-btn').className = 'timer-btn play';
+  } else {
+    timerRunning = true;
+    document.getElementById('timer-play-btn').textContent = '⏸';
+    document.getElementById('timer-play-btn').className = 'timer-btn pause';
+    timerInterval = setInterval(()=>{
+      timerLeft--;
+      timerUpdateDisplay();
+      if(timerLeft <= 0){
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('timer-play-btn').textContent = '▶';
+        document.getElementById('timer-play-btn').className = 'timer-btn play';
+        toastMsg('⏰ Tempo esgotado!');
+      }
+    }, 1000);
+  }
+}
+
+function timerReset(){
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerLeft = timerTotal;
+  document.getElementById('timer-play-btn').textContent = '▶';
+  document.getElementById('timer-play-btn').className = 'timer-btn play';
+  timerUpdateDisplay();
+}
+
+function timerUpdateDisplay(){
+  const m = Math.floor(timerLeft / 60);
+  const s = timerLeft % 60;
+  const display = document.getElementById('timer-display');
+  const fill = document.getElementById('timer-fill');
+  if(!display) return;
+  display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  display.className = timerLeft <= 60 && timerLeft > 0 ? 'timer-display urgente' : 'timer-display';
+  const pct = timerTotal > 0 ? (timerLeft / timerTotal * 100) : 100;
+  if(fill) fill.style.width = pct + '%';
+  if(fill) fill.style.background = timerLeft <= 60 ? 'var(--rose)' : 'var(--gold)';
+}
+
+// ── AVALIAÇÃO PÓS-ENCONTRO ──
+let avalStar = 0;
+let avalNum = '';
+let avalDinamica = null;
+
+function toggleDone(){
+  if(!currentDetail) return;
+  const id = currentDetail.id;
+  const jaFeita = historico.find(h=>h.id===id);
+  if(jaFeita){
+    historico = historico.filter(h=>h.id!==id);
+    toastMsg('↩️ Removida do histórico');
+    salvarHistorico();
+    updateDoneBtn();
+    renderHistorico();
+  } else {
+    // Marca como feita e abre avaliação
+    historico.unshift({
+      id, titulo: currentDetail.titulo, categoria: currentDetail.categoria,
+      tempo: currentDetail.tempo, data: new Date().toISOString(),
+      avaliacao: null
+    });
+    salvarHistorico();
+    updateDoneBtn();
+    renderHistorico();
+    toastMsg('✅ Marcada como realizada!');
+    setTimeout(()=>abrirAval(currentDetail), 800);
+  }
+}
+
+function abrirAval(dinamica){
+  avalDinamica = dinamica;
+  avalStar = 0;
+  avalNum = '';
+  document.getElementById('aval-din-nome').textContent = dinamica.titulo;
+  document.getElementById('aval-obs').value = '';
+  document.querySelectorAll('.aval-num-btn').forEach(b=>b.classList.remove('selected'));
+  avalRenderStars();
+  document.getElementById('aval-overlay').classList.add('open');
+}
+
+function fecharAval(){
+  document.getElementById('aval-overlay').classList.remove('open');
+}
+
+function fecharAvalOverlay(e){
+  if(e.target===document.getElementById('aval-overlay')) fecharAval();
+}
+
+function avalSetStar(n){
+  avalStar = n;
+  avalRenderStars();
+}
+
+function avalRenderStars(){
+  for(let i=1;i<=5;i++){
+    document.getElementById('aval-s'+i).textContent = i <= avalStar ? '⭐' : '☆';
+  }
+}
+
+function avalSetNum(btn, val){
+  avalNum = val;
+  document.querySelectorAll('.aval-num-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function salvarAval(){
+  if(!avalDinamica) return;
+  const obs = document.getElementById('aval-obs').value.trim();
+  const idx = historico.findIndex(h=>h.id===avalDinamica.id);
+  if(idx >= 0){
+    historico[idx].avaliacao = {
+      estrelas: avalStar,
+      participantes: avalNum,
+      obs,
+      dataAval: new Date().toISOString()
+    };
+    salvarHistorico();
+    renderHistorico();
+  }
+  fecharAval();
+  toastMsg('🌸 Avaliação salva!');
+}
+
+// ── STORIES ──
+function abrirStories(){
+  if(!currentDetail) return;
+  const canvas = document.getElementById('stories-canvas');
+  const ctx = canvas.getContext('2d');
+  const w = 1080, h = 1920;
+  canvas.width = w; canvas.height = h;
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if(isDark){
+    grad.addColorStop(0, '#2d1b3d');
+    grad.addColorStop(0.5, '#3d2456');
+    grad.addColorStop(1, '#1a1025');
+  } else {
+    grad.addColorStop(0, '#f9e4f0');
+    grad.addColorStop(0.5, '#fdf0f8');
+    grad.addColorStop(1, '#f5dced');
+  }
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+
+  // Decorative circles
+  ctx.globalAlpha = 0.08;
+  ctx.fillStyle = isDark ? '#fff' : '#c97bb0';
+  ctx.beginPath(); ctx.arc(w*0.85, h*0.12, 280, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(w*0.1, h*0.88, 220, 0, Math.PI*2); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // App name top
+  ctx.fillStyle = isDark ? 'rgba(255,255,255,.5)' : 'rgba(180,80,150,.6)';
+  ctx.font = '700 48px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Encontros de Mulheres 🌸', w/2, 140);
+
+  // Category pill
+  const catW = 400, catH = 72, catX = (w-catW)/2, catY = 240;
+  ctx.fillStyle = isDark ? 'rgba(255,255,255,.12)' : 'rgba(201,123,176,.15)';
+  roundRect(ctx, catX, catY, catW, catH, 36);
+  ctx.fill();
+  ctx.fillStyle = isDark ? '#e8a0d0' : '#a0547a';
+  ctx.font = '600 40px sans-serif';
+  ctx.fillText(currentDetail.categoria + ' · ' + currentDetail.tempo, w/2, catY+46);
+
+  // Title
+  ctx.fillStyle = isDark ? '#ffffff' : '#4a1a3a';
+  ctx.font = 'bold 88px serif';
+  wrapText(ctx, currentDetail.titulo, w/2, 440, w-120, 100);
+
+  // Divider
+  ctx.strokeStyle = isDark ? 'rgba(255,255,255,.2)' : 'rgba(180,80,150,.3)';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(120, 780); ctx.lineTo(w-120, 780); ctx.stroke();
+
+  // Objetivo label
+  ctx.fillStyle = isDark ? '#e8a0d0' : '#c97bb0';
+  ctx.font = '700 44px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('🎯 OBJETIVO', 100, 860);
+
+  // Objetivo text
+  ctx.fillStyle = isDark ? 'rgba(255,255,255,.85)' : '#5a2a4a';
+  ctx.font = '400 52px sans-serif';
+  wrapText(ctx, currentDetail.objetivo, 100, 940, w-200, 68, 'left');
+
+  // Aplicação box
+  const boxY = 1380;
+  ctx.fillStyle = isDark ? 'rgba(255,255,255,.08)' : 'rgba(201,123,176,.12)';
+  roundRect(ctx, 80, boxY, w-160, 360, 32);
+  ctx.fill();
+  ctx.fillStyle = isDark ? '#e8a0d0' : '#c97bb0';
+  ctx.font = '700 40px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('✦ Aplicação Espiritual', 120, boxY+60);
+  ctx.fillStyle = isDark ? 'rgba(255,255,255,.8)' : '#5a2a4a';
+  ctx.font = '400 44px sans-serif';
+  wrapText(ctx, currentDetail.aplicacao, 120, boxY+120, w-280, 58, 'left', 4);
+
+  // Bottom tag
+  ctx.fillStyle = isDark ? 'rgba(255,255,255,.3)' : 'rgba(180,80,150,.4)';
+  ctx.font = '500 40px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('app Encontros de Mulheres', w/2, h-80);
+
+  document.getElementById('stories-overlay').classList.add('open');
+}
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, x, y, maxW, lineH, align='center', maxLines=99){
+  if(!text) return y;
+  const words = text.split(' ');
+  let line = '';
+  let lineCount = 0;
+  ctx.textAlign = align;
+  for(let i=0;i<words.length;i++){
+    const test = line + words[i] + ' ';
+    if(ctx.measureText(test).width > maxW && line){
+      ctx.fillText(line.trim(), x, y);
+      line = words[i] + ' ';
+      y += lineH;
+      lineCount++;
+      if(lineCount >= maxLines) break;
+    } else { line = test; }
+  }
+  if(line.trim() && lineCount < maxLines) ctx.fillText(line.trim(), x, y);
+  return y;
+}
+
+function fecharStories(){
+  document.getElementById('stories-overlay').classList.remove('open');
+}
+
+function fecharStoriesOverlay(e){
+  if(e.target===document.getElementById('stories-overlay')) fecharStories();
+}
+
+function salvarStories(){
+  const canvas = document.getElementById('stories-canvas');
+  const link = document.createElement('a');
+  link.download = `dinamica-${currentDetail?.id||'encontro'}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  toastMsg('📸 Imagem salva!');
 }
 
 // ── COMPARTILHAR ──
@@ -3853,6 +4232,12 @@ const TRANSLATIONS = {
     'prod.mais.vendido': '⭐ Mais vendido',
     'prod.oferta.especial': '💛 Oferta especial',
     'btn.voltar': '← Voltar',
+    'aval.titulo': '🌸 Como foi o encontro?',
+    'aval.nota': 'Avaliação geral',
+    'aval.participantes': 'Quantas participaram?',
+    'aval.obs': 'Observações (opcional)',
+    'aval.obs.ph': 'O que funcionou bem? O que você faria diferente?',
+    'aval.salvar': '✅ Salvar avaliação',
     'gerar.aviso': 'Esta função sorteia aleatoriamente entre os conteúdos que você já adquiriu — não gera conteúdo novo.',
     'dp.limpar': 'Limpar',
     'dp.hoje': 'Hoje',
@@ -4112,6 +4497,12 @@ const TRANSLATIONS = {
     'prod.mais.vendido': '⭐ Best seller',
     'prod.oferta.especial': '💛 Special offer',
     'home.section.premium': '✨ Premium Products',
+    'aval.titulo': '🌸 How was the meeting?',
+    'aval.nota': 'Overall rating',
+    'aval.participantes': 'How many participated?',
+    'aval.obs': 'Notes (optional)',
+    'aval.obs.ph': 'What worked well? What would you do differently?',
+    'aval.salvar': '✅ Save review',
     'gerar.aviso': 'This feature randomly picks from content you already own — it does not generate new content.',
     'dp.limpar': 'Clear',
     'dp.hoje': 'Today',
@@ -4377,6 +4768,12 @@ const TRANSLATIONS = {
     'plan.sug.ver.todas': 'Ver todas →',
     'admin.stat.usuarios': 'Usuarias',
     'admin.stat.ativos': 'Activas',
+    'aval.titulo': '🌸 ¿Cómo fue el encuentro?',
+    'aval.nota': 'Evaluación general',
+    'aval.participantes': '¿Cuántas participaron?',
+    'aval.obs': 'Observaciones (opcional)',
+    'aval.obs.ph': '¿Qué funcionó bien? ¿Qué harías diferente?',
+    'aval.salvar': '✅ Guardar evaluación',
     'gerar.aviso': 'Esta función sortea aleatoriamente entre los contenidos que ya adquiriste — no genera contenido nuevo.',
     'dp.limpar': 'Limpiar',
     'dp.hoje': 'Hoy',
